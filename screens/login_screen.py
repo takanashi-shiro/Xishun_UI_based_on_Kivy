@@ -129,6 +129,7 @@ class Login_Screen(Screen):
         def press_forget_pwd(instance, value):
             print('The Label <%s> is being pressed' % value)
             self.manager.current = 'forget_pwd'
+            self.manager.transition.direction = 'right'
 
         self.forget_pwd.bind(on_ref_press=press_forget_pwd)
 
