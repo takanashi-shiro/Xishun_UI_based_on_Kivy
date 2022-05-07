@@ -118,14 +118,21 @@ class Login_Screen(Screen):
         self.login_button.bind(on_press=submit)
         self.add_widget(self.login_button)
 
-        self.forgot_pwd = Label(
-            text='忘记密码',
+        self.forget_pwd = Label(
+            text='[ref=forget_pwd]忘记密码[/ref]',
             size_hint=(.10, .08),
             pos_hint={'x': .25, 'y': .05},
             color=[0, 0, 0, .7],
-            font_name=ft
+            font_name=ft,
+            markup=True
         )
-        self.add_widget(self.forgot_pwd)
+        def press_forget_pwd(instance, value):
+            print('The Label <%s> is being pressed' % value)
+            self.manager.current = 'forget_pwd'
+
+        self.forget_pwd.bind(on_ref_press=press_forget_pwd)
+
+        self.add_widget(self.forget_pwd)
 
         self.register = Label(
             text='[ref=register]注册用户[/ref]',

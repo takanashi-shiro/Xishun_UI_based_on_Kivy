@@ -5,18 +5,17 @@ from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
 from kivy.uix.textinput import TextInput
 
-kivy.resources.resource_add_path('font/')
+kivy.resources.resource_add_path('../font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
 
 
-class Register_Screen(Screen):
-
+class Forget_Pwd_Screen(Screen):
     def _update_rect(self, instance, value):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
 
     def __init__(self, **kwargs):
-        super(Register_Screen, self).__init__(**kwargs)
+        super(Forget_Pwd_Screen, self).__init__(**kwargs)
         x_size, y_size = 900, 1600
         # self.size_hint = ( None , None )
         self.size = (x_size, y_size)
@@ -61,28 +60,10 @@ class Register_Screen(Screen):
         self.add_widget(username)
 
         self.add_widget(Label(
-            text='密码',
-            size_hint=(.10, .08),
-            pos_hint={'x': .08, 'y': .45},
-            color=[0, .5, 1, 1],
-            font_name=ft
-        )
-        )
-        passwd = TextInput(
-            multiline=False,
-            size_hint=(.60, .08),
-            pos_hint={'x': .2, 'y': .45},
-            font_size=txt_size - 10,
-            password=True
-        )
-        self.add_widget(passwd)
-
-        self.add_widget(Label(
             text='QQ',
             size_hint=(.10, .08),
             pos_hint={'x': .08, 'y': .3},
             color=[0, .5, 1, 1],
-            font_name=ft
         )
         )
         QQ = TextInput(
@@ -90,32 +71,34 @@ class Register_Screen(Screen):
             size_hint=(.60, .08),
             pos_hint={'x': .2, 'y': .3},
             font_size=txt_size - 10,
+            password=True
         )
         self.add_widget(QQ)
 
-        register_button = Button(
-            text='注册',
-            size_hint=(.6, .1),
-            # pos_hint={'x': .15, 'y': .15},
-            pos_hint={'x':.2,'y':.15},
+        self.add_widget(Label(
+            text='新密码',
+            # 新密码
+            size_hint=(.10, .08),
+            pos_hint={'x': .08, 'y': .45},
+            color=[0, .5, 1, 1],
             font_name=ft
         )
-
-        return_button2 = Button(
-            text='<',
-            font_size=20,
-            size_hint=(.1,.1),
-            pos_hint={'x':0,'y':.9},
-            color=[0,0,0,1],
-            background_color=[1,1,1,.05]
         )
-        def on_press_return(instance):
-            print('The button [%s] is being pressed' % instance.text)
-            self.manager.current = 'login'
-            self.manager.transition.direction = 'right'
-        return_button2.bind(on_press=on_press_return)
-        def on_press_register(instance):
-            print('The button [%s] is being pressed' % instance.text)
-        register_button.bind(on_press=on_press_register)
-        self.add_widget(return_button2)
-        self.add_widget(register_button)
+        newpasswd = TextInput(
+            multiline=False,
+            size_hint=(.60, .08),
+            pos_hint={'x': .2, 'y': .45},
+            font_size=txt_size - 10,
+            password=True
+        )
+        self.add_widget(newpasswd)
+
+        reset_button = Button(
+            text='重设密码',
+            # 重新设置密码
+            size_hint=(.5, .1),
+            pos_hint={'x': .25, 'y': .15},
+            font_name=ft
+        )
+        self.add_widget(reset_button)
+        self.cols = 2
