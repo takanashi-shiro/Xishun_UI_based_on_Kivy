@@ -126,7 +126,12 @@ class Forget_Pwd_Screen(Screen):
             change_captcha_button(instance)
             event1 = Clock.schedule_interval(lambda dt: change_captcha_button(instance), 1)
             # 用sleep会崩溃，要用kivy的clock
-            Clock.schedule_once(lambda dt: event1.cancel(), 61)
+            Clock.schedule_once(lambda dt: captcha_clock_cancel(event1, instance), 61)
+
+        def captcha_clock_cancel(event, instance):
+            event.cancel()
+            instance.disabled = False
+            instance.text = '获取验证码'
             self.nowsecond = 60
 
         def change_captcha_button(instance):
