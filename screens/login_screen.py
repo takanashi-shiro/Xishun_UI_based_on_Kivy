@@ -61,7 +61,8 @@ class Login_Screen(Screen):
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .5},
             # text='1',
-            font_size=txt_size - 10
+            font_size=txt_size - 10,
+            write_tab=False
         )
 
         self.add_widget(self.username)
@@ -79,15 +80,8 @@ class Login_Screen(Screen):
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .35},
             font_size=txt_size - 10,
-            password=True
-        )
-        self.add_widget(self.passwd)
-
-        self.login_button = Button(
-            text='登录',
-            size_hint=(.8, .1),
-            pos_hint={'x': .1, 'y': .15},
-            font_name=ft
+            password=True,
+            tab_width=0
         )
 
         def submit(instance):
@@ -103,7 +97,7 @@ class Login_Screen(Screen):
                 passwd = passwd[0]
             print('The button <%s> is being pressed' % instance.text)
             print('username = %s\npassword = %s' % (username, passwd))
-            if username == 'Ender_White' and passwd == '123456':
+            if username == '1' and passwd == '1':
                 self.manager.current = 'model'
             else:
                 popup_layout = RelativeLayout(size=(500, 500))
@@ -114,6 +108,17 @@ class Login_Screen(Screen):
                 popup = Popup(title='Error', content=popup_layout, size_hint=(.5, .5))
                 popup.open()
                 close_popup_button.bind(on_press=popup.dismiss)
+
+        self.passwd.bind(on_text_validate=submit)
+        self.add_widget(self.passwd)
+
+        self.login_button = Button(
+            text='登录',
+            size_hint=(.8, .1),
+            pos_hint={'x': .1, 'y': .15},
+            font_name=ft
+        )
+
 
         self.login_button.bind(on_press=submit)
         self.add_widget(self.login_button)

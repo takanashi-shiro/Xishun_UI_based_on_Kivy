@@ -38,12 +38,12 @@ class Course_Drop_List(Button):
     def __init__(self, **kwargs):
         super(Course_Drop_List, self).__init__(**kwargs)
         self.text = '周数'
-        self.size_hint = (None, None)
+        self.size_hint_y = None
         self.font_name = ft
         dropdown = DropDown()
         for index in range(21):
             if index == 0: continue
-            btn = Button(text='第%d周' % index, size_hint_y=None, height=44, font_name=ft)
+            btn = Button(text='第%d周' % index, size_hint_y=None, height=self.height*0.8, font_name=ft)
             btn.bind(on_release=lambda btn: dropdown.select(btn.text))
             dropdown.add_widget(btn)
         self.bind(on_release=dropdown.open)
