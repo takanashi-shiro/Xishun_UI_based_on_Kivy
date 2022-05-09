@@ -1,17 +1,12 @@
-import kivy
-
-kivy.require('2.1.0')
 from kivy.graphics import Color, Rectangle
-from kivy.uix.textinput import TextInput
-from kivy.uix.label import Label  # 译者注：这里是从kivy.uix.label包中导入Label控件，这里都注意开头字母要大写
-from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
-from database.DB_user import login_check
 
-kivy.resources.resource_add_path('font/')
-ft = kivy.resources.resource_find('DroidSansFallback.ttf')
+from widgets.button_item import MyButton
+from widgets.label_item import MyLabel
+from database.DB_user import login_check
+from widgets.textinput_item import Username_TextInput,Passwd_TextInput
 
 
 class Login_Screen(Screen):
@@ -28,56 +23,46 @@ class Login_Screen(Screen):
             Color(1, 1, 1, .95)
             self.rect = Rectangle(size=self.size, pos=self.pos)
 
-        self.add_widget(Label(
+        self.add_widget(MyLabel(
             text='喜顺',
             font_size=50,
             size_hint=(.00, .08),
             color=[0, .5, 1, 1],
             pos_hint={'x': .5, 'y': .8},
-            font_name=ft
         ))
-        self.add_widget(Label(
+        self.add_widget(MyLabel(
             text='可以摆烂的，不止于此',
             font_size=20,
             size_hint=(.00, .08),
             color=[0, 0, 0, .4],
             pos_hint={'x': .5, 'y': .7},
-            font_name=ft
         ))
 
-        self.add_widget(Label(
+        self.add_widget(MyLabel(
             text='用户名',
             size_hint=(.10, .08),
             pos_hint={'x': .08, 'y': .5},
             color=[0, .5, 1, 1],
-            font_name=ft
-        )
-        )
-        self.username = TextInput(
-            multiline=False,
+        ))
+        self.username = Username_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .5},
             hint_text='输入用户名/QQ号',
             font_size=self.height*0.3,
-            write_tab=False,
-            font_name=ft
+            write_tab=False
         )
         self.add_widget(self.username)
 
-        self.add_widget(Label(
+        self.add_widget(MyLabel(
             text='密码',
             size_hint=(.10, .08),
             pos_hint={'x': .08, 'y': .35},
             color=[0, .5, 1, 1],
-            font_name=ft
-        )
-        )
-        self.passwd = TextInput(
-            multiline=False,
+        ))
+        self.passwd = Passwd_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .35},
             font_size=self.height*0.3,
-            password=True,
             tab_width=0
         )
 
@@ -94,13 +79,17 @@ class Login_Screen(Screen):
                 passwd = passwd[0]
             print('The button <%s> is being pressed' % instance.text)
             print('username = %s\npassword = %s' % (username, passwd))
-            if login_check(username,passwd):
+            status = login_check(username,passwd)
+            if status == 1:
                 self.manager.current = 'model'
             else:
+                popup_text = '用户名或密码错误'
+                if status == -1:
+                    popup_text = '服务器开小差了~稍后试试吧'
                 popup_layout = RelativeLayout(size=(500, 500))
                 popup_layout.add_widget(
-                    Label(text='用户名或密码错误', font_name=ft, size_hint=(0, 0), pos_hint={'x': .5, 'y': .8}))
-                close_popup_button = Button(text='了解', font_name=ft, size_hint=(.3, .2), pos_hint={'x': .35, 'y': .3})
+                    MyLabel(text=popup_text, size_hint=(0, 0), pos_hint={'x': .5, 'y': .8}))
+                close_popup_button = MyButton(text='了解', size_hint=(.3, .2), pos_hint={'x': .35, 'y': .3})
                 popup_layout.add_widget(close_popup_button)
                 popup = Popup(title='Error', content=popup_layout, size_hint=(.5, .5))
                 popup.open()
@@ -109,22 +98,20 @@ class Login_Screen(Screen):
         self.passwd.bind(on_text_validate=submit)
         self.add_widget(self.passwd)
 
-        self.login_button = Button(
+        self.login_button = MyButton(
             text='登录',
             size_hint=(.8, .1),
             pos_hint={'x': .1, 'y': .15},
-            font_name=ft
         )
 
         self.login_button.bind(on_press=submit)
         self.add_widget(self.login_button)
 
-        self.forget_pwd = Label(
+        self.forget_pwd = MyLabel(
             text='[ref=forget_pwd]忘记密码[/ref]',
             size_hint=(.10, .08),
             pos_hint={'x': .25, 'y': .05},
             color=[0, 0, 0, .7],
-            font_name=ft,
             markup=True
         )
 
@@ -137,12 +124,11 @@ class Login_Screen(Screen):
 
         self.add_widget(self.forget_pwd)
 
-        self.register = Label(
+        self.register = MyLabel(
             text='[ref=register]注册用户[/ref]',
             size_hint=(.10, .08),
             pos_hint={'x': .65, 'y': .05},
             color=[0, 0, 0, .7],
-            font_name=ft,
             markup=True
         )
 

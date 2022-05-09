@@ -7,3 +7,9 @@ SQL_config = {
     'database': 'qq_bot'
 }
 #
+
+Send_Mail_config = {
+    'From': 'takanashigml@163.com',
+    'pwd': 'NFHYMDSODISBILJI',
+    'STMP_SSL': 'smtp.163.com'
+}
