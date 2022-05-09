@@ -4,7 +4,6 @@ from kivy.graphics import Color, Rectangle
 kivy.require('2.1.0')
 from kivy.uix.tabbedpanel import *
 from kivy.uix.screenmanager import Screen
-from .login_screen import Login_Screen
 from .course_screen import Course_Screen
 from .main_screen import Main_Screen
 
@@ -52,5 +51,10 @@ class Model_Screen(Screen):
 
         th3 = TabbedPanelHeader(text='课表', font_name=ft)
         th3.content = Course_Screen()
+
+        def on_move_in(instance):
+            print("moved in %s" % instance.text)
+
+        th3.bind(on_release=on_move_in)
         tp.add_widget(th3)
         self.add_widget(tp)

@@ -21,10 +21,6 @@ class Login_Screen(Screen):
 
     def __init__(self, **kwargs):
         super(Login_Screen, self).__init__(**kwargs)  # 这里要加super，才能把现有的新初始化方法覆盖掉继承来的旧初始化方法
-        x_size, y_size = 900, 1600
-        # self.size_hint = ( None , None )
-        self.size = (x_size, y_size)
-        txt_size = y_size / 50
 
         self.bind(size=self._update_rect, pos=self._update_rect)
         with self.canvas.before:
@@ -60,11 +56,11 @@ class Login_Screen(Screen):
             multiline=False,
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .5},
-            # text='1',
-            font_size=txt_size - 10,
-            write_tab=False
+            hint_text='输入用户名/QQ号',
+            font_size=self.height*0.3,
+            write_tab=False,
+            font_name=ft
         )
-
         self.add_widget(self.username)
 
         self.add_widget(Label(
@@ -79,7 +75,7 @@ class Login_Screen(Screen):
             multiline=False,
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .35},
-            font_size=txt_size - 10,
+            font_size=self.height*0.3,
             password=True,
             tab_width=0
         )
@@ -119,7 +115,6 @@ class Login_Screen(Screen):
             font_name=ft
         )
 
-
         self.login_button.bind(on_press=submit)
         self.add_widget(self.login_button)
 
@@ -131,6 +126,7 @@ class Login_Screen(Screen):
             font_name=ft,
             markup=True
         )
+
         def press_forget_pwd(instance, value):
             print('The Label <%s> is being pressed' % value)
             self.manager.current = 'forget_pwd'
