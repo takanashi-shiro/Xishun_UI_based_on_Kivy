@@ -5,6 +5,7 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
 from kivy.uix.textinput import TextInput
+from widgets.register_item import Username_TextInput, Passwd_TextInput, QQ_TextInput
 
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
@@ -52,13 +53,12 @@ class Register_Screen(Screen):
             font_name=ft
         )
         )
-        username = TextInput(
-            multiline=False,
+        username = Username_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .2, 'y': .65},
-            # text='1',
-            font_size=txt_size - 10
+            font_size=txt_size - 10,
         )
+
         self.add_widget(username)
 
         self.add_widget(Label(
@@ -69,12 +69,11 @@ class Register_Screen(Screen):
             font_name=ft
         )
         )
-        passwd = TextInput(
-            multiline=False,
+        passwd = Passwd_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .2, 'y': .5},
             font_size=txt_size - 10,
-            password=True
+
         )
         self.add_widget(passwd)
 
@@ -86,8 +85,7 @@ class Register_Screen(Screen):
             font_name=ft
         )
         )
-        QQ = TextInput(
-            multiline=False,
+        QQ = QQ_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .2, 'y': .35},
             font_size=txt_size - 10,

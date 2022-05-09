@@ -8,6 +8,7 @@ from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
+from database.DB_user import login_check
 
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
@@ -93,7 +94,7 @@ class Login_Screen(Screen):
                 passwd = passwd[0]
             print('The button <%s> is being pressed' % instance.text)
             print('username = %s\npassword = %s' % (username, passwd))
-            if username == '1' and passwd == '1':
+            if login_check(username,passwd):
                 self.manager.current = 'model'
             else:
                 popup_layout = RelativeLayout(size=(500, 500))
