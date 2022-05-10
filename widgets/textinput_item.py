@@ -24,6 +24,7 @@ class Passwd_TextInput(TextInput):
         self.multiline = False
         self.password = True
         self.font_size = self.height * 0.3
+        self.font_name = ft
 
     def insert_text(self, substring, from_undo=False):
         pat = re.compile('[^0-9a-zA-Z\w@#!~%$^&()*,./?<>{}]')

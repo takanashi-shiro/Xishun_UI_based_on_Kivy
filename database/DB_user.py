@@ -1,9 +1,11 @@
 import mysql.connector
 from config import SQL_config as config
 
+
 def link():
     con = mysql.connector.connect(**config)
     return con
+
 
 def qq_check(qq_number):
     try:
@@ -19,6 +21,7 @@ def qq_check(qq_number):
             return True
     except Exception as e:
         return -1
+
 
 def username_check(username):
     try:
@@ -36,7 +39,55 @@ def username_check(username):
         return -1
 
 
-def login_check(username_or_qqNumber,pwd):
+def get_username(qq_number):
+    try:
+        sql = "select UI_username from UI_user where qq_number = '%s'" % qq_number
+        con = link()
+        cursor = con.cursor(buffered=True)
+        cursor.execute(sql)
+        username = cursor.fetchone()
+        con.close()
+        if username is None:
+            return None
+        else:
+            return username[0]
+    except Exception as e:
+        return -1
+
+
+def get_qq_number(username):
+    try:
+        sql = "select qq_number from UI_user where UI_username = '%s'" % username
+        con = link()
+        cursor = con.cursor(buffered=True)
+        cursor.execute(sql)
+        qq_number = cursor.fetchone()
+        con.close()
+        if qq_number is None:
+            return None
+        else:
+            return qq_number[0]
+    except Exception as e:
+        return -1
+
+
+def get_passwd(UI_username):
+    try:
+        sql = "select UI_passwd from UI_user where UI_username = '%s'" % UI_username
+        con = link()
+        cursor = con.cursor(buffered=True)
+        cursor.execute(sql)
+        passwd = cursor.fetchone()
+        con.close()
+        if passwd is None:
+            return None
+        else:
+            return passwd[0]
+    except Exception as e:
+        return -1
+
+
+def login_check(username_or_qqNumber, pwd):
     try:
         result_QQ = qq_check(username_or_qqNumber)
         result_username = username_check(username_or_qqNumber)
@@ -58,11 +109,44 @@ def login_check(username_or_qqNumber,pwd):
             cursor = con.cursor(buffered=True)
             cursor.execute(sql)
             result_pwd = cursor.fetchone()
+            print(result_pwd)
             con.close()
-        if result_pwd == pwd:
-            return 1
+        if result_pwd[0] == pwd:
+            if result_QQ:
+                return 2
+            else:
+                return 1
         else:
             return 0
     except Exception as e:
+        return -1, username_or_qqNumber
+
+
+def update_pwd(username, new_pwd, qq_number=None):
+    try:
+        if qq_number == None:
+            sql = "update UI_passwd set '%s' UI_user where UI_username = '%s'" % (new_pwd, username)
+            con = link()
+            cursor = con.cursor(buffered=True)
+            cursor.execute(sql)
+            try:
+                con.commit()
+                return 1
+            except Exception as e:
+                con.rollback()
+                return 0
+
+    except Exception as e:
         return -1
 
+
+def insert_user(username, pwd, qq_number):
+    sql = "insert into UI_user values('%s','%s','%s')" % (username, pwd, qq_number)
+    con = link()
+    cursor = con.cursor(buffered=True)
+    try:
+        cursor.execute(sql)
+        con.commit()
+    except Exception as e:
+        print(e)
+        con.rollback()

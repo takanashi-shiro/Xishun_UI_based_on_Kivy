@@ -3,6 +3,10 @@ from kivy.graphics import Color, Rectangle
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+
+from screens.change_pwd_screen import Change_Pwd_Screen
+from widgets.do_in_tmp import read_tmp
 
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
@@ -28,7 +32,6 @@ class Main_Screen(GridLayout):
     def __init__(self, **kwargs):
         super(Main_Screen, self).__init__(**kwargs)
         self.rows = 2
-
         Home_Title = (Label(
             text="喜顺's Home",
             font_size=50, size_hint=(.5, .5),
@@ -60,5 +63,16 @@ class Main_Screen(GridLayout):
             size_hint=[.2,.2],
             font_name=ft
         )
+        def press_change_pwd(instance):
+            print('The button <%s> is being pressed' % instance.text)
+            username = read_tmp()
+            print(username)
+            popup_change_pwd = Popup()
+            popup_change_pwd.content = Change_Pwd_Screen(username=username)
+            popup_change_pwd.title = 'Change_Password'
+            popup_change_pwd.font_name = ft
+            popup_change_pwd.size_hint = (.5, .8)
+            popup_change_pwd.open()
+        btn3.bind(on_press=press_change_pwd)
         buttons_layout.add_widget(btn3)
         self.add_widget(buttons_layout)

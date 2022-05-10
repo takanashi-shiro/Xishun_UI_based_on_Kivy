@@ -1,9 +1,15 @@
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
 
+from database.DB_user import insert_user
+from widgets.Popup_item import MyPopup
 from widgets.button_item import Return_Button, MyButton
+from widgets.captcha_create import Captcha_Create
 from widgets.label_item import MyLabel
+from widgets.send_mail import Send_Msg
 from widgets.textinput_item import Username_TextInput, Passwd_TextInput, QQ_TextInput
 
 
@@ -72,31 +78,9 @@ class Register_Screen(Screen):
         )
         self.add_widget(QQ)
 
-        register_button = MyButton(
-            text='注册',
-            size_hint=(.6, .1),
-            pos_hint={'x': .2, 'y': .05},
-        )
-
-        return_button = Return_Button()
-
-        def on_press_return(instance):
-            print('The button [%s] is being pressed' % instance.text)
-            self.manager.current = 'login'
-            self.manager.transition.direction = 'right'
-
-        return_button.bind(on_press=on_press_return)
-
-        def on_press_register(instance):
-            print('The button [%s] is being pressed' % instance.text)
-
-        register_button.bind(on_press=on_press_register)
-        self.add_widget(return_button)
-        self.add_widget(register_button)
 
         self.add_widget(MyLabel(
             text='验证码',
-            # 新密码
             size_hint=(.10, .08),
             pos_hint={'x': .08, 'y': .2},
             color=[0, .5, 1, 1],
@@ -115,15 +99,30 @@ class Register_Screen(Screen):
         )
 
         self.nowsecond = 60
-
+        self.captcha_str = ''
+        self.is_QQ = False
         def on_press_captcha_button(instance):
             print('The button [%s] is being pressed' % instance.text)
-
             instance.disabled = True
             change_captcha_button(instance)
             event1 = Clock.schedule_interval(lambda dt: change_captcha_button(instance), 1)
             # 用sleep会崩溃，要用kivy的clock
             Clock.schedule_once(lambda dt: captcha_clock_cancel(event1, instance), 61)
+
+            if 5 < len(QQ.text) < 13:
+                self.captcha_str = Captcha_Create()
+                result_mail = Send_Msg([QQ.text+"@qq.com"], '喜顺Bot的验证码来咯', self.captcha_str)
+                if result_mail == '验证码已发送，请不要关闭软件哦':
+                    self.is_QQ = True
+                    popup = MyPopup(result_mail)
+                    popup.open()
+                else:
+                    popup = MyPopup('输入的QQ号不合法，重新输入吧')
+                    popup.open()
+
+            else:
+                popup = MyPopup('输入的QQ号不合法，重新输入吧')
+                popup.open()
 
         def captcha_clock_cancel(event, instance):
             event.cancel()
@@ -137,3 +136,46 @@ class Register_Screen(Screen):
 
         captcha_button.bind(on_press=on_press_captcha_button)
         self.add_widget(captcha_button)
+
+        register_button = MyButton(
+            text='注册',
+            size_hint=(.6, .1),
+            pos_hint={'x': .2, 'y': .05},
+        )
+
+        return_button = Return_Button()
+
+        def on_press_return(instance):
+            print('The button [%s] is being pressed' % instance.text)
+            self.manager.current = 'login'
+            self.manager.transition.direction = 'right'
+
+        return_button.bind(on_press=on_press_return)
+
+        def on_press_register(instance):
+            print('The button [%s] is being pressed' % instance.text)
+            popup_text='注册成功,请返回登录8'
+            if not 5 <= len(username.text) <= 15:
+                popup_text='用户名长度应在5~15位'
+            elif not 6 <= len(passwd.text) <= 18:
+                popup_text = '密码长度应在6~18位'
+            elif not self.is_QQ:
+                popup_text = 'QQ不存在哦'
+            elif not (self.captcha_str == captcha.text):
+                popup_text = '验证码不正确'
+            popup_register = MyPopup(popup_text)
+            if popup_text == '注册成功,请返回登录8':
+                popup_register.title = '注册成功'
+                print(username.text,passwd.text,QQ.text)
+                insert_user(username=username.text,pwd=passwd.text,qq_number=QQ.text)
+
+            popup_register.open()
+
+
+
+
+
+        register_button.bind(on_press=on_press_register)
+        self.add_widget(return_button)
+        self.add_widget(register_button)
+

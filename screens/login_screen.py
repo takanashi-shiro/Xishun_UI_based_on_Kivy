@@ -3,9 +3,11 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
 
+from widgets.Popup_item import MyPopup
 from widgets.button_item import MyButton
+from widgets.do_in_tmp import write_in_tmp
 from widgets.label_item import MyLabel
-from database.DB_user import login_check
+from database.DB_user import login_check, get_username
 from widgets.textinput_item import Username_TextInput,Passwd_TextInput
 
 
@@ -17,7 +19,6 @@ class Login_Screen(Screen):
 
     def __init__(self, **kwargs):
         super(Login_Screen, self).__init__(**kwargs)  # 这里要加super，才能把现有的新初始化方法覆盖掉继承来的旧初始化方法
-
         self.bind(size=self._update_rect, pos=self._update_rect)
         with self.canvas.before:
             Color(1, 1, 1, .95)
@@ -44,14 +45,14 @@ class Login_Screen(Screen):
             pos_hint={'x': .08, 'y': .5},
             color=[0, .5, 1, 1],
         ))
-        self.username = Username_TextInput(
+        username_textinput = Username_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .5},
             hint_text='输入用户名/QQ号',
             font_size=self.height*0.3,
             write_tab=False
         )
-        self.add_widget(self.username)
+        self.add_widget(username_textinput)
 
         self.add_widget(MyLabel(
             text='密码',
@@ -59,7 +60,7 @@ class Login_Screen(Screen):
             pos_hint={'x': .08, 'y': .35},
             color=[0, .5, 1, 1],
         ))
-        self.passwd = Passwd_TextInput(
+        passwd_textinput = Passwd_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .35},
             font_size=self.height*0.3,
@@ -67,36 +68,35 @@ class Login_Screen(Screen):
         )
 
         def submit(instance):
-            username = self.username.text.split()
-            passwd = self.passwd.text.split()
+            username = username_textinput.text.split()
+            passwd = passwd_textinput.text.split()
             if not username:
-                username = self.username.text
+                username = username_textinput.text
             else:
                 username = username[0]
             if not passwd:
-                passwd = self.passwd.text
+                passwd = passwd_textinput.text
             else:
                 passwd = passwd[0]
             print('The button <%s> is being pressed' % instance.text)
             print('username = %s\npassword = %s' % (username, passwd))
             status = login_check(username,passwd)
-            if status == 1:
+            if status == 1 or status == 2:
+                if status == 1:
+                    write_in_tmp(username)
+                else:
+                    write_in_tmp(get_username(username))
                 self.manager.current = 'model'
             else:
                 popup_text = '用户名或密码错误'
                 if status == -1:
                     popup_text = '服务器开小差了~稍后试试吧'
-                popup_layout = RelativeLayout(size=(500, 500))
-                popup_layout.add_widget(
-                    MyLabel(text=popup_text, size_hint=(0, 0), pos_hint={'x': .5, 'y': .8}))
-                close_popup_button = MyButton(text='了解', size_hint=(.3, .2), pos_hint={'x': .35, 'y': .3})
-                popup_layout.add_widget(close_popup_button)
-                popup = Popup(title='Error', content=popup_layout, size_hint=(.5, .5))
+                popup=MyPopup(popup_text)
                 popup.open()
-                close_popup_button.bind(on_press=popup.dismiss)
+                # close_popup_button.bind(on_press=popup.dismiss)
 
-        self.passwd.bind(on_text_validate=submit)
-        self.add_widget(self.passwd)
+        passwd_textinput.bind(on_text_validate=submit)
+        self.add_widget(passwd_textinput)
 
         self.login_button = MyButton(
             text='登录',
