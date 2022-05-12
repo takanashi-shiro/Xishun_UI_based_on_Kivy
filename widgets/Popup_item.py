@@ -5,6 +5,13 @@ from widgets.button_item import MyButton
 from widgets.label_item import MyLabel
 
 
+class MyPopup_Remind(Popup):
+    def __init__(self,mytext='提醒', **kwargs):
+        super(MyPopup_Remind, self).__init__(**kwargs)
+        self.content=MyLabel(text=mytext, size_hint=(1, 1))
+        self.title_size = 0
+        self.size_hint=(.3,.2)
+
 class MyPopup(Popup):
     def __init__(self,mytext='警告', **kwargs):
         super(MyPopup, self).__init__(**kwargs)

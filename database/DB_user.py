@@ -125,17 +125,18 @@ def login_check(username_or_qqNumber, pwd):
 def update_pwd(username, new_pwd, qq_number=None):
     try:
         if qq_number == None:
-            sql = "update UI_passwd set '%s' UI_user where UI_username = '%s'" % (new_pwd, username)
-            con = link()
-            cursor = con.cursor(buffered=True)
-            cursor.execute(sql)
-            try:
-                con.commit()
-                return 1
-            except Exception as e:
-                con.rollback()
-                return 0
-
+            sql = "update UI_user set UI_passwd = '%s' where UI_username = '%s'" % (new_pwd, username)
+        else:
+            sql = "update UI_user set UI_passwd = '%s' where UI_username = '%s' and qq_number = '%s'" % (new_pwd, username,qq_number)
+        con = link()
+        cursor = con.cursor(buffered=True)
+        cursor.execute(sql)
+        try:
+            con.commit()
+            return 1
+        except Exception as e:
+            con.rollback()
+            return 0
     except Exception as e:
         return -1
 

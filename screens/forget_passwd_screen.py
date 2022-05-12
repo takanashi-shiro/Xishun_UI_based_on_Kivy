@@ -5,8 +5,13 @@ from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
 from kivy.uix.textinput import TextInput
 
+from database.DB_user import update_pwd, username_check, get_username
+from widgets.Popup_item import MyPopup_Remind, MyPopup
 from widgets.button_item import Return_Button, MyButton
+from widgets.captcha_create import Captcha_Create
 from widgets.label_item import MyLabel
+from widgets.mythread import MyThread
+from widgets.send_mail import Send_Msg
 from widgets.textinput_item import Username_TextInput, Passwd_TextInput, QQ_TextInput
 
 
@@ -97,14 +102,25 @@ class Forget_Pwd_Screen(Screen):
         )
 
         self.nowsecond = 60
-
+        self.captcha_str = ''
         def on_press_captcha_button(instance):
             print('The button [%s] is being pressed' % instance.text)
-            instance.disabled = True
-            change_captcha_button(instance)
-            event1 = Clock.schedule_interval(lambda dt: change_captcha_button(instance), 1)
-            # 用sleep会崩溃，要用kivy的clock
-            Clock.schedule_once(lambda dt: captcha_clock_cancel(event1, instance), 61)
+            if 5 < len(QQ.text) < 13:
+                self.captcha_str = Captcha_Create()
+                instance.disabled = True
+                change_captcha_button(instance)
+                event1 = Clock.schedule_interval(lambda dt: change_captcha_button(instance), 1)
+                # 用sleep会崩溃，要用kivy的clock
+                Clock.schedule_once(lambda dt: captcha_clock_cancel(event1, instance), 61)
+                popup = MyPopup_Remind('验证码已发送~')
+                popup.open()
+                Clock.schedule_once(lambda dt: popup.dismiss(), 2)
+                t = MyThread(Send_Msg, ([QQ.text + "@qq.com"], '喜顺Bot的验证码来咯', self.captcha_str))
+                t.daemon = True
+                t.start()
+            else:
+                popup = MyPopup('输入的QQ号不合法，重新输入吧')
+                popup.open()
 
         def captcha_clock_cancel(event, instance):
             event.cancel()
@@ -125,6 +141,31 @@ class Forget_Pwd_Screen(Screen):
             pos_hint={'x': .25, 'y': .05},
         )
 
+        def on_press_reset(instance):
+            print('The button [%s] is being pressed' % instance.text)
+            popup_text='密码重设成功,请返回登录8'
+            if not 5 <= len(username.text) <= 15:
+                popup_text='用户名长度应在5~15位'
+            elif not username_check(username.text):
+                popup_text='用户名不存在'
+            elif not username.text == get_username(QQ.text):
+                popup_text='用户名和QQ不匹配'
+            elif not 6 <= len(newpasswd.text) <= 18:
+                popup_text = '密码长度应在6~18位'
+            elif not (self.captcha_str == captcha.text):
+                popup_text = '验证码不正确'
+            popup_register = MyPopup(popup_text)
+            if popup_text == '密码重设成功,请返回登录8':
+                popup_register.title_size = 0
+                print(username.text,newpasswd.text,QQ.text)
+                t = MyThread(update_pwd,(username.text,newpasswd.text,QQ.text))
+                t.daemon = True
+                t.start()
+            popup_register.open()
+            self.manager.current= 'login'
+            self.manager.transition.direction = 'right'
+
+        reset_button.bind(on_press=on_press_reset)
         self.add_widget(reset_button)
         return_button = Return_Button()
 

@@ -5,10 +5,11 @@ from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
 
 from database.DB_user import insert_user
-from widgets.Popup_item import MyPopup
+from widgets.Popup_item import MyPopup, MyPopup_Remind
 from widgets.button_item import Return_Button, MyButton
 from widgets.captcha_create import Captcha_Create
 from widgets.label_item import MyLabel
+from widgets.mythread import MyThread
 from widgets.send_mail import Send_Msg
 from widgets.textinput_item import Username_TextInput, Passwd_TextInput, QQ_TextInput
 
@@ -100,26 +101,21 @@ class Register_Screen(Screen):
 
         self.nowsecond = 60
         self.captcha_str = ''
-        self.is_QQ = False
         def on_press_captcha_button(instance):
             print('The button [%s] is being pressed' % instance.text)
-            instance.disabled = True
-            change_captcha_button(instance)
-            event1 = Clock.schedule_interval(lambda dt: change_captcha_button(instance), 1)
-            # 用sleep会崩溃，要用kivy的clock
-            Clock.schedule_once(lambda dt: captcha_clock_cancel(event1, instance), 61)
-
             if 5 < len(QQ.text) < 13:
                 self.captcha_str = Captcha_Create()
-                result_mail = Send_Msg([QQ.text+"@qq.com"], '喜顺Bot的验证码来咯', self.captcha_str)
-                if result_mail == '验证码已发送，请不要关闭软件哦':
-                    self.is_QQ = True
-                    popup = MyPopup(result_mail)
-                    popup.open()
-                else:
-                    popup = MyPopup('输入的QQ号不合法，重新输入吧')
-                    popup.open()
-
+                instance.disabled = True
+                change_captcha_button(instance)
+                event1 = Clock.schedule_interval(lambda dt: change_captcha_button(instance), 1)
+                # 用sleep会崩溃，要用kivy的clock
+                Clock.schedule_once(lambda dt: captcha_clock_cancel(event1, instance), 61)
+                popup = MyPopup_Remind('验证码已发送~')
+                popup.open()
+                Clock.schedule_once(lambda dt: popup.dismiss(), 2)
+                t = MyThread(Send_Msg,([QQ.text+"@qq.com"], '喜顺Bot的验证码来咯', self.captcha_str))
+                t.daemon = True
+                t.start()
             else:
                 popup = MyPopup('输入的QQ号不合法，重新输入吧')
                 popup.open()
@@ -159,21 +155,18 @@ class Register_Screen(Screen):
                 popup_text='用户名长度应在5~15位'
             elif not 6 <= len(passwd.text) <= 18:
                 popup_text = '密码长度应在6~18位'
-            elif not self.is_QQ:
-                popup_text = 'QQ不存在哦'
             elif not (self.captcha_str == captcha.text):
                 popup_text = '验证码不正确'
             popup_register = MyPopup(popup_text)
             if popup_text == '注册成功,请返回登录8':
                 popup_register.title = '注册成功'
                 print(username.text,passwd.text,QQ.text)
-                insert_user(username=username.text,pwd=passwd.text,qq_number=QQ.text)
-
+                t = MyThread(insert_user,(username.text,passwd.text,QQ.text))
+                t.daemon = True
+                t.start()
             popup_register.open()
-
-
-
-
+            self.manager.current= 'login'
+            self.manager.transition.direction = 'left'
 
         register_button.bind(on_press=on_press_register)
         self.add_widget(return_button)
