@@ -1,9 +1,9 @@
-import mysql.connector
+import pymysql
 from config import SQL_config as config
 
 
 def link():
-    con = mysql.connector.connect(**config)
+    con = pymysql.connect(**config)
     return con
 
 
@@ -11,7 +11,7 @@ def qq_check(qq_number):
     try:
         sql = "select qq_number from UI_user where qq_number = '%s'" % qq_number
         con = link()
-        cursor = con.cursor(buffered=True)
+        cursor = con.cursor()
         cursor.execute(sql)
         result_QQ = cursor.fetchone()
         con.close()
@@ -27,7 +27,7 @@ def username_check(username):
     try:
         sql = "select UI_username from UI_user where UI_username = '%s'" % username
         con = link()
-        cursor = con.cursor(buffered=True)
+        cursor = con.cursor()
         cursor.execute(sql)
         result_username = cursor.fetchone()
         con.close()
@@ -43,7 +43,7 @@ def get_username(qq_number):
     try:
         sql = "select UI_username from UI_user where qq_number = '%s'" % qq_number
         con = link()
-        cursor = con.cursor(buffered=True)
+        cursor = con.cursor()
         cursor.execute(sql)
         username = cursor.fetchone()
         con.close()
@@ -59,7 +59,7 @@ def get_qq_number(username):
     try:
         sql = "select qq_number from UI_user where UI_username = '%s'" % username
         con = link()
-        cursor = con.cursor(buffered=True)
+        cursor = con.cursor()
         cursor.execute(sql)
         qq_number = cursor.fetchone()
         con.close()
@@ -75,7 +75,7 @@ def get_passwd(UI_username):
     try:
         sql = "select UI_passwd from UI_user where UI_username = '%s'" % UI_username
         con = link()
-        cursor = con.cursor(buffered=True)
+        cursor = con.cursor()
         cursor.execute(sql)
         passwd = cursor.fetchone()
         con.close()
@@ -99,14 +99,14 @@ def login_check(username_or_qqNumber, pwd):
         if result_QQ:
             sql = "select UI_passwd from UI_user where qq_number = '%s'" % username_or_qqNumber
             con = link()
-            cursor = con.cursor(buffered=True)
+            cursor = con.cursor()
             cursor.execute(sql)
             result_pwd = cursor.fetchone()
             con.close()
         else:
             sql = "select UI_passwd from UI_user where UI_username = '%s'" % username_or_qqNumber
             con = link()
-            cursor = con.cursor(buffered=True)
+            cursor = con.cursor()
             cursor.execute(sql)
             result_pwd = cursor.fetchone()
             print(result_pwd)
@@ -129,7 +129,7 @@ def update_pwd(username, new_pwd, qq_number=None):
         else:
             sql = "update UI_user set UI_passwd = '%s' where UI_username = '%s' and qq_number = '%s'" % (new_pwd, username,qq_number)
         con = link()
-        cursor = con.cursor(buffered=True)
+        cursor = con.cursor()
         cursor.execute(sql)
         try:
             con.commit()
@@ -144,7 +144,19 @@ def update_pwd(username, new_pwd, qq_number=None):
 def insert_user(username, pwd, qq_number):
     sql = "insert into UI_user values('%s','%s','%s')" % (username, pwd, qq_number)
     con = link()
-    cursor = con.cursor(buffered=True)
+    cursor = con.cursor()
+    try:
+        cursor.execute(sql)
+        con.commit()
+    except Exception as e:
+        print(e)
+        con.rollback()
+
+def insert_jwxt(qq_number, cookie):
+    sql = "insert into jwxt values('%s','%s')" % (cookie, qq_number)
+    print(sql)
+    con = link()
+    cursor = con.cursor()
     try:
         cursor.execute(sql)
         con.commit()

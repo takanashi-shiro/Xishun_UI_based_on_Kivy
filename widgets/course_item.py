@@ -19,7 +19,10 @@ class Course_Class_Item(Button):
         self.disabled_color = [0, 0, 0, 1]
         self.size_hint = [.3, .2]
         self.font_name = ft
-        self.padding = [3, 3]
+        # self.padding = [3, 3]
+        self.text_size = self.width,None
+
+
 
 
 class Course_Info_Item(Label):
@@ -55,21 +58,29 @@ class Course_Drop_List(Button):
 
 
 class Layout_Content(GridLayout):
+
+    course_list = []
     def __init__(self, **kwargs):
         super(Layout_Content, self).__init__(**kwargs)
         self.cols = 8
         self.rows = 6
         self.padding = 20
         self.spacing = 3
+
+
+    def _update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+    def add_items(self):
         for i in range(6):
             t = '+'
+            nowcourse = '%s'%['1-2', '3-4', '5-6', '7-8', '9-10'][i - 1]
             for j in range(8):
                 if i == 0:
                     if j != 0:
                         t = '周%s' % (['一', '二', '三', '四', '五', '六', '日'][j - 1])
                     else:
                         t = ''
-
                     item = Course_Info_Item(text=t, size_hint=[.3, .1])
                     item.bind(size=item._update_rect, pos=item._update_rect)
                     with item.canvas.before:
@@ -86,13 +97,20 @@ class Layout_Content(GridLayout):
                         Color(0, .5, 1, .5)
                         item.rect = Rectangle(size=item.size, pos=item.pos)
                 else:
+                    course_info = {
+                        'name': 'python程序设计',
+                        'content': '',
+                        'pos': '计通楼512'
+                    }
+                    if course_info['content'] == '':
+                        t = '%s %s' % (course_info['name'], course_info['pos'])
+                    else:
+                        t = '%s %s %s' % (course_info['name'], course_info['content'], course_info['pos'])
                     item = Course_Class_Item(text=t)
-                t = '+'
+               # 周 j+1 第 i 节
+               #  t = '周 %d 第 %d 节'%(j,i)
                 self.add_widget(item)
 
-    def _update_rect(self, instance, value):
-        self.rect.pos = instance.pos
-        self.rect.size = instance.size
 
 
 class Layout_Title(GridLayout):

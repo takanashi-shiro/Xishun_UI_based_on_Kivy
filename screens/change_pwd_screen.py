@@ -1,25 +1,19 @@
-from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
-from kivy.graphics import Color, Rectangle
 
 from database.DB_user import update_pwd, get_passwd
 from widgets.Popup_item import MyPopup
 from widgets.label_item import MyLabel
-from widgets.textinput_item import Username_TextInput, Passwd_TextInput
+from widgets.textinput_item import Passwd_TextInput
 from widgets.button_item import MyButton
 
 
 class Change_Pwd_Screen(RelativeLayout):
 
-    def _update_rect(self, instance, value):
-        self.rect.pos = instance.pos
-        self.rect.size = instance.size
-
     def __init__(self, username, **kwargs):
         super(Change_Pwd_Screen, self).__init__(**kwargs)  # 这里要加super，才能把现有的新初始化方法覆盖掉继承来的旧初始化方法
 
         self.add_widget(MyLabel(
-            font_size = self.height * 0.4,
+            # font_size = self.height * 0.4,
             text='修改密码',
             size_hint=(.00, .08),
             color=[1, 1, 1, 1],
@@ -37,7 +31,7 @@ class Change_Pwd_Screen(RelativeLayout):
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .5},
             hint_text='输入原密码',
-            font_size=self.height * 0.3,
+            # font_size=self.height * 0.3,
             write_tab=False
         )
 
@@ -53,7 +47,7 @@ class Change_Pwd_Screen(RelativeLayout):
         new_passwd_textinput = Passwd_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .35},
-            font_size=self.height * 0.3,
+            # font_size=self.height * 0.3,
             tab_width=0
         )
         self.add_widget(new_passwd_textinput)
@@ -88,10 +82,4 @@ class Change_Pwd_Screen(RelativeLayout):
         )
 
         yes_button.bind(on_press=submit)
-        # close_popup_button = MyButton(
-        #     text = '返回',
-        #     size_hint=(.8,.1),
-        #     pos_hint={'x':.3,'y':.15}
-        # )
-        # close_popup_button.bind(on_press=self.dismiss)
         self.add_widget(yes_button)

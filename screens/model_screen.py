@@ -1,6 +1,8 @@
 import kivy
 from kivy.graphics import Color, Rectangle
 
+from widgets.course_item import Layout_Title, Layout_Content
+
 kivy.require('2.1.0')
 from kivy.uix.tabbedpanel import *
 from kivy.uix.screenmanager import Screen
@@ -36,11 +38,19 @@ class Model_Screen(Screen):
         )
         th1 = TabbedPanelHeader(text='home')
         tp.add_widget(th1)
-        th3 = TabbedPanelHeader(text='课表', font_name=ft)
+        th2 = TabbedPanelHeader(text='课表', font_name=ft)
         th1.content = Main_Screen()
-        th3.content = Course_Screen()
-        def on_move_in(instance):
-            print("moved in %s" % instance.text)
-        th3.bind(on_release=on_move_in)
-        tp.add_widget(th3)
+        course_screen = Course_Screen()
+        def on_move_in2(instance):
+            course_layout_title = Layout_Title(size_hint=[1, .05])
+            course_screen.add_widget(course_layout_title)
+            layout_content = Layout_Content(size_hint=[1, .95])
+            layout_content.add_items()
+            course_screen.add_widget(layout_content)
+        th2.bind(on_release=on_move_in2)
+        def on_move_in1(instance):
+            course_screen.clear_widgets()
+        th1.bind(on_release=on_move_in1)
+        th2.content = course_screen
+        tp.add_widget(th2)
         self.add_widget(tp)

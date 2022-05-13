@@ -9,7 +9,6 @@ class Username_TextInput(TextInput):
     def __init__(self, **kwargs):
         super(Username_TextInput, self).__init__(**kwargs)
         self.multiline = False
-        self.font_size = self.height * 0.3
         self.font_name = ft
 
     def insert_text(self, substring, from_undo=False):
@@ -23,7 +22,7 @@ class Passwd_TextInput(TextInput):
         super(Passwd_TextInput, self).__init__(**kwargs)
         self.multiline = False
         self.password = True
-        self.font_size = self.height * 0.3
+        # self.font_size = self.height * 0.3
         self.font_name = ft
 
     def insert_text(self, substring, from_undo=False):
@@ -35,7 +34,7 @@ class QQ_TextInput(TextInput):
     def __init__(self, **kwargs):
         super(QQ_TextInput, self).__init__(**kwargs)
         self.multiline = False
-        self.font_size = self.height * 0.3
+        # self.font_size = self.height * 0.3
 
     def insert_text(self, substring, from_undo=False):
         pat = re.compile('[^0-9]')

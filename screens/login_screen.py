@@ -1,7 +1,6 @@
+from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 from kivy.uix.screenmanager import Screen
-from kivy.uix.popup import Popup
-from kivy.uix.relativelayout import RelativeLayout
 
 from widgets.Popup_item import MyPopup
 from widgets.button_item import MyButton
@@ -23,47 +22,53 @@ class Login_Screen(Screen):
         with self.canvas.before:
             Color(1, 1, 1, .95)
             self.rect = Rectangle(size=self.size, pos=self.pos)
-
-        self.add_widget(MyLabel(
+        self.size_hint = (None,None)
+        # Window.size = [900,1600]
+        self.size = Window.size
+        print(self.size)
+        title = MyLabel(
             text='喜顺',
-            font_size=50,
-            size_hint=(.00, .08),
+            size_hint=(.0, .0),
             color=[0, .5, 1, 1],
             pos_hint={'x': .5, 'y': .8},
-        ))
-        self.add_widget(MyLabel(
+        )
+        title.font_size = title.font_size * 3
+        print(title.font_size)
+        self.add_widget(title)
+        sub_title = MyLabel(
             text='可以摆烂的，不止于此',
-            font_size=20,
-            size_hint=(.00, .08),
+            size_hint=(.0, .0),
             color=[0, 0, 0, .4],
             pos_hint={'x': .5, 'y': .7},
-        ))
+        )
+        # sub_title.font_size = sub_title.font_size
+        self.add_widget(sub_title)
 
         self.add_widget(MyLabel(
             text='用户名',
             size_hint=(.10, .08),
-            pos_hint={'x': .08, 'y': .5},
+            pos_hint={'x': .12, 'y': .5},
             color=[0, .5, 1, 1],
         ))
         username_textinput = Username_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .5},
             hint_text='输入用户名/QQ号',
-            font_size=self.height*0.3,
+            # font_size=self.height*0.25,
             write_tab=False
         )
-        self.add_widget(username_textinput)
 
+        self.add_widget(username_textinput)
         self.add_widget(MyLabel(
             text='密码',
             size_hint=(.10, .08),
-            pos_hint={'x': .08, 'y': .35},
+            pos_hint={'x': .12, 'y': .35},
             color=[0, .5, 1, 1],
         ))
         passwd_textinput = Passwd_TextInput(
             size_hint=(.60, .08),
             pos_hint={'x': .25, 'y': .35},
-            font_size=self.height*0.3,
+            # font_size=self.height*0.25,
             tab_width=0
         )
 

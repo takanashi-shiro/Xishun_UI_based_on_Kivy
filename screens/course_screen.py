@@ -9,8 +9,6 @@ class Course_Screen(GridLayout):
         self.rows = 2
         self.cols = 1
         self.spacing = 20
-        layout_title = Layout_Title(size_hint=[1,.05])
-        self.add_widget(layout_title)
-        layout_content = Layout_Content(size_hint=[1,.95])
-        self.add_widget(layout_content)
+
+
 
