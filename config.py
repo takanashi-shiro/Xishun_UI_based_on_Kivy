@@ -1,15 +1,15 @@
 # SQL
 SQL_config = {
-    'user': 'root',
-    'password': '2dErPVpn7hk9TXhv',
-    'host': 'takanashi-shiro.top',
+    'user': '',
+    'password': '',
+    'host': '',
     'port': 33066,
     'database': 'qq_bot'
 }
 #
 
 Send_Mail_config = {
-    'From': 'takanashigml@163.com',
-    'pwd': 'NFHYMDSODISBILJI',
+    'From': '',
+    'pwd': '',
     'STMP_SSL': 'smtp.163.com'
 }
