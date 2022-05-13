@@ -1,6 +1,5 @@
 
 import requests
-import base64
 
 
 def login(encode):

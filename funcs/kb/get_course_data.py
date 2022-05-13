@@ -1,5 +1,5 @@
-from funcs.in_course import in_course
-from funcs.in_week import in_week
+from funcs.kb.in_course import in_course
+from funcs.kb.in_week import in_week
 
 def get_course_data(week,day,course,class_ls):
     for i in class_ls:

@@ -1,4 +1,5 @@
 import pymysql
+
 from config import SQL_config as config
 
 
@@ -143,18 +144,6 @@ def update_pwd(username, new_pwd, qq_number=None):
 
 def insert_user(username, pwd, qq_number):
     sql = "insert into UI_user values('%s','%s','%s')" % (username, pwd, qq_number)
-    con = link()
-    cursor = con.cursor()
-    try:
-        cursor.execute(sql)
-        con.commit()
-    except Exception as e:
-        print(e)
-        con.rollback()
-
-def insert_jwxt(qq_number, cookie):
-    sql = "insert into jwxt values('%s','%s')" % (cookie, qq_number)
-    print(sql)
     con = link()
     cursor = con.cursor()
     try:

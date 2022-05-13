@@ -2,9 +2,9 @@ from kivy.uix.relativelayout import RelativeLayout
 
 from database.DB_user import update_pwd, get_passwd
 from widgets.Popup_item import MyPopup
+from widgets.button_item import MyButton
 from widgets.label_item import MyLabel
 from widgets.textinput_item import Passwd_TextInput
-from widgets.button_item import MyButton
 
 
 class Change_Pwd_Screen(RelativeLayout):

@@ -1,6 +1,7 @@
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import smtplib
+
 from config import Send_Mail_config as config
 
 

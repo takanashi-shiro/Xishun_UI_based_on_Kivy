@@ -2,8 +2,9 @@ import base64
 
 from kivy.uix.relativelayout import RelativeLayout
 
-from database.DB_user import get_qq_number, insert_jwxt
-from funcs.login import login
+from database.DB_user import get_qq_number
+from database.jwxt_DB import insert_jwxt
+from funcs.kb.login import login
 from widgets.Popup_item import MyPopup
 from widgets.button_item import MyButton
 from widgets.label_item import MyLabel

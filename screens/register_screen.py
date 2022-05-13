@@ -1,8 +1,6 @@
 from kivy.clock import Clock
-from kivy.uix.popup import Popup
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
+from kivy.uix.screenmanager import Screen
 
 from database.DB_user import insert_user
 from widgets.Popup_item import MyPopup, MyPopup_Remind

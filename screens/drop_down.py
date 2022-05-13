@@ -1,10 +1,9 @@
 import kivy
-from kivy.uix import dropdown
-from kivy.uix.dropdown import DropDown
-from kivy.uix.button import Button
-from kivy.base import runTouchApp
 from kivy.app import App
-
+from kivy.base import runTouchApp
+from kivy.uix import dropdown
+from kivy.uix.button import Button
+from kivy.uix.dropdown import DropDown
 
 kivy.resources.resource_add_path('../font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')

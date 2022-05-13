@@ -2,12 +2,12 @@ from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 from kivy.uix.screenmanager import Screen
 
+from database.DB_user import login_check, get_username
 from widgets.Popup_item import MyPopup
 from widgets.button_item import MyButton
 from widgets.do_in_tmp import write_in_tmp
 from widgets.label_item import MyLabel
-from database.DB_user import login_check, get_username
-from widgets.textinput_item import Username_TextInput,Passwd_TextInput
+from widgets.textinput_item import Username_TextInput, Passwd_TextInput
 
 
 class Login_Screen(Screen):

@@ -1,9 +1,6 @@
 from kivy.clock import Clock
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen
 from kivy.graphics import Color, Rectangle
-from kivy.uix.textinput import TextInput
+from kivy.uix.screenmanager import Screen
 
 from database.DB_user import update_pwd, username_check, get_username
 from widgets.Popup_item import MyPopup_Remind, MyPopup

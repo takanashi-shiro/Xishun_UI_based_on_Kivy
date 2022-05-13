@@ -1,5 +1,4 @@
 from kivy.uix.gridlayout import GridLayout
-from widgets.course_item import Layout_Title,Layout_Content
 
 
 class Course_Screen(GridLayout):

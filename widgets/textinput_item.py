@@ -1,8 +1,21 @@
 import re
+
 import kivy
 from kivy.uix.textinput import TextInput
+
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
+
+class digital_TextInput(TextInput):
+    def __init__(self, **kwargs):
+        super(digital_TextInput, self).__init__(**kwargs)
+        self.multiline = False
+        self.font_name = ft
+
+    def insert_text(self, substring, from_undo=False):
+        pat = re.compile('[^0-9]')
+        s = re.sub(pat, '', substring)
+        return super().insert_text(s, from_undo=from_undo)
 
 class Username_TextInput(TextInput):
 

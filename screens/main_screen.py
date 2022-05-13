@@ -5,6 +5,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 
+from screens.band_elc_screen import Band_Elc_Screen
 from screens.band_kb_screen import Band_Kb_Screen
 from screens.change_pwd_screen import Change_Pwd_Screen
 from widgets.do_in_tmp import read_tmp
@@ -59,7 +60,7 @@ class Main_Screen(GridLayout):
             print(username)
             popup_band_kb = Popup()
             popup_band_kb.content = Band_Kb_Screen(username=username)
-            popup_band_kb.title = 'Change_Password'
+            popup_band_kb.title = 'Band_KB'
             popup_band_kb.font_name = ft
             popup_band_kb.size_hint = (.8, .8)
             popup_band_kb.open()
@@ -72,6 +73,17 @@ class Main_Screen(GridLayout):
             size_hint=[.2,.2],
             font_name=ft
         )
+        def press_band_elc(instance):
+            print('The button <%s> is being pressed' % instance.text)
+            username = read_tmp()
+            print(username)
+            popup_band_elc = Popup()
+            popup_band_elc.content = Band_Elc_Screen(username=username)
+            popup_band_elc.title = 'Band_Elc'
+            popup_band_elc.font_name = ft
+            popup_band_elc.size_hint = (.8, .8)
+            popup_band_elc.open()
+        btn2.bind(on_press=press_band_elc)
         buttons_layout.add_widget(btn2)
         btn3 = Button(
             text='修改密码',
