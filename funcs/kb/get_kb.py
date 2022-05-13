@@ -88,7 +88,7 @@ def get_kb(session):
     }
     response = session.get(url=url, headers=headers)
     soup = bs4.BeautifulSoup(response.text, 'lxml')
-
+    #pip install lxml
     ls = soup.find_all('div', class_="kbcontent")
     class_list = []
     tmp_dicts_ls = ['name', 'teacher', 'weeks', 'week_flag', 'day', 'class', 'pos']
@@ -100,7 +100,6 @@ def get_kb(session):
                 if len(j.text) != 0:
                     if j.text == '&nbspP' or j.text == '&nbspO':
                         continue
-                    # print(j.text)
                     if tt == 2:
                         weeks = j.text[0:j.text.find('(')]
                         week_flag = j.text[j.text.find('(') + 1:j.text.find(')')]
@@ -129,4 +128,5 @@ def get_kb(session):
     tmp_ls = get_sykb(session)
     class_list = class_list + tmp_ls
     res = sorted(class_list, key=functools.cmp_to_key(mycmp))
+
     return res

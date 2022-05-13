@@ -6,7 +6,7 @@ from .DB_user import link
 elc_unit_price = 0.6
 
 def find_bd(qq_number):
-    sql = "select * from query_elc where qq_number = '%s'" % qq_number
+    sql = "select qq_number from query_elc where qq_number = '%s'" % qq_number
     con = link()
     cursor = con.cursor()
     cursor.execute(sql)

@@ -14,7 +14,7 @@ def get_now_week(session):
         'Connection': 'keep-alive'
     }
     response = session.get(url=url, headers=headers)
-    soup = bs4.BeautifulSoup(response.text, 'lxml')
+    soup = bs4.BeautifulSoup(response.text, 'html.parser')
     ls = soup.find_all('span',class_='main_text main_color')[0].text
     res = ls[ls.find("第")+1:ls.find("周"):]
     return res
@@ -33,7 +33,7 @@ def get_all_week(session):
         'Connection': 'keep-alive'
     }
     response = session.get(url=url, headers=headers)
-    soup = bs4.BeautifulSoup(response.text, 'lxml')
+    soup = bs4.BeautifulSoup(response.text, 'html.parser')
     res = soup.find_all('div', id='li_showWeek')[0].text
     res=res[res.find('/')+1:]
     res=res[:res.find("周")]

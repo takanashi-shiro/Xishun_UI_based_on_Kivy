@@ -5,6 +5,8 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 
+from funcs.kb.get_course_data import get_course_data
+
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
 
@@ -20,9 +22,7 @@ class Course_Class_Item(Button):
         self.size_hint = [.3, .2]
         self.font_name = ft
         # self.padding = [3, 3]
-        self.text_size = self.width,None
-
-
+        self.text_size = self.width, None
 
 
 class Course_Info_Item(Label):
@@ -57,24 +57,24 @@ class Course_Drop_List(Button):
         # runTouchApp(self)
 
 
-class Layout_Content(GridLayout):
-
+class Course_Layout_Content(GridLayout):
     course_list = []
+
     def __init__(self, **kwargs):
-        super(Layout_Content, self).__init__(**kwargs)
+        super(Course_Layout_Content, self).__init__(**kwargs)
         self.cols = 8
         self.rows = 6
         self.padding = 20
         self.spacing = 3
 
-
     def _update_rect(self, instance, value):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
-    def add_items(self):
+
+    def add_items(self, week='1', class_ls=None):
         for i in range(6):
             t = '+'
-            nowcourse = '%s'%['1-2', '3-4', '5-6', '7-8', '9-10'][i - 1]
+            nowcourse = '%s' % ['1-2', '3-4', '5-6', '7-8', '9-10'][i - 1]
             for j in range(8):
                 if i == 0:
                     if j != 0:
@@ -97,26 +97,37 @@ class Layout_Content(GridLayout):
                         Color(0, .5, 1, .5)
                         item.rect = Rectangle(size=item.size, pos=item.pos)
                 else:
-                    course_info = {
-                        'name': 'python程序设计',
-                        'content': '',
-                        'pos': '计通楼512'
-                    }
-                    if course_info['content'] == '':
-                        t = '%s %s' % (course_info['name'], course_info['pos'])
+                    if class_ls is None:
+                        t = '+'
                     else:
-                        t = '%s %s %s' % (course_info['name'], course_info['content'], course_info['pos'])
+                        # 周 j+1 第 i 节
+                        #  t = '周 %d 第 %d 节'%(j,i)
+                        day = str(j)
+                        data = get_course_data(week, day, nowcourse, class_ls)
+                        if data is None:
+                            t = '+'
+                        else:
+                            if 'content' in data.keys():
+                                content = data['content']
+                            else:
+                                content = ''
+                            course_info = {
+                                'name': data['name'],
+                                'content': content,
+                                'pos': data['pos']
+                            }
+                            if course_info['content'] == '':
+                                t = '%s %s' % (course_info['name'], course_info['pos'])
+                            else:
+                                t = '%s %s %s' % (course_info['name'], course_info['content'], course_info['pos'])
                     item = Course_Class_Item(text=t)
-               # 周 j+1 第 i 节
-               #  t = '周 %d 第 %d 节'%(j,i)
                 self.add_widget(item)
 
 
-
-class Layout_Title(GridLayout):
+class Course_Layout_Title(GridLayout):
 
     def __init__(self, **kwargs):
-        super(Layout_Title, self).__init__(**kwargs)
+        super(Course_Layout_Title, self).__init__(**kwargs)
         self.cols = 5
         self.spacing = 20
         self.padding = 7

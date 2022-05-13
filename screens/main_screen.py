@@ -8,7 +8,7 @@ from kivy.uix.popup import Popup
 from screens.band_elc_screen import Band_Elc_Screen
 from screens.band_kb_screen import Band_Kb_Screen
 from screens.change_pwd_screen import Change_Pwd_Screen
-from widgets.do_in_tmp import read_tmp
+from funcs.do_in_tmp import read_tmp
 
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')

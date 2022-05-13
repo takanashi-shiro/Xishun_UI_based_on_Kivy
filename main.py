@@ -1,4 +1,6 @@
 import kivy
+from kivy import Config
+from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
 kivy.require('2.1.0')
@@ -20,4 +22,7 @@ class MyApp(App):
 
 
 if __name__ == '__main__':
+    Config.set('graphics', 'borderless', 0)
+    Config.set('graphics', 'window_state', 'maximized')
+    Config.write()
     MyApp().run()

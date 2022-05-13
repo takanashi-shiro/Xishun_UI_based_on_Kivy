@@ -5,7 +5,7 @@ def trans_course(course):
     return res
 
 def in_course(now_course_time,course_time):
-    now_course_time = now_course_time[1:-1].split('-')[0]
+    now_course_time = int(now_course_time.split('-')[0])
     if now_course_time in trans_course(course_time):
         return True
     else:
