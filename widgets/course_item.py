@@ -41,20 +41,17 @@ class Course_Info_Item(Label):
 
 
 class Course_Drop_List(Button):
-    def __init__(self, **kwargs):
+    def __init__(self,week, **kwargs):
         super(Course_Drop_List, self).__init__(**kwargs)
-        self.text = '周数'
+        self.text = '第%s周'%week
         self.size_hint_y = None
         self.font_name = ft
-        dropdown = DropDown()
-        for index in range(21):
-            if index == 0: continue
-            btn = Button(text='第%d周' % index, size_hint_y=None, height=self.height * 0.8, font_name=ft)
-            btn.bind(on_release=lambda btn: dropdown.select(btn.text))
-            dropdown.add_widget(btn)
-        self.bind(on_release=dropdown.open)
-        dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
-        # runTouchApp(self)
+
+
+    def change_week(self,week):
+        self.text = '第%s周'%week
+    def get_self_week(self):
+        return self.week
 
 
 class Course_Layout_Content(GridLayout):
@@ -126,7 +123,7 @@ class Course_Layout_Content(GridLayout):
 
 class Course_Layout_Title(GridLayout):
 
-    def __init__(self, **kwargs):
+    def __init__(self,drop_list,pre_week_button,next_week_button, **kwargs):
         super(Course_Layout_Title, self).__init__(**kwargs)
         self.cols = 5
         self.spacing = 20
@@ -135,17 +132,18 @@ class Course_Layout_Title(GridLayout):
         with self.canvas.before:
             Color(1, 1, 1, 1)
             self.rect = Rectangle(size=self.size, pos=self.pos)
-        pre_week_button = Button(text='<', size_hint=(.17, 1))
-        next_week_button = Button(text='>', size_hint=(.17, 1))
         for i in range(5):
             if i == 2:
-                self.add_widget(Course_Drop_List(height=self.height / 2, size_hint=(.3, 1)))
+                self.add_widget(drop_list)
             elif i == 1:
                 self.add_widget(pre_week_button)
             elif i == 3:
                 self.add_widget(next_week_button)
             else:
                 self.add_widget(Label())
+
+    def get_week_from_drop_list(self):
+        return self.drop_list.get_self_week()
 
     def _update_rect(self, instance, value):
         self.rect.pos = instance.pos

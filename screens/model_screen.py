@@ -51,42 +51,15 @@ class Model_Screen(Screen):
         tp.add_widget(th1)
         th2 = TabbedPanelHeader(text='课表', font_name=ft)
         th1.content = Main_Screen()
-        course_screen = Course_Screen()
-        self.count_in2 = 0
-        self.course_ls = []
-        self.week = '1'
         qq_number = get_qq_number(username)
+        course_screen = Course_Screen(qq_number)
+
+
+
         def on_move_in2(instance):
             elc_screen.clear_widgets()
-            course_layout_title = Course_Layout_Title(size_hint=[1, .05])
-            course_screen.add_widget(course_layout_title)
-            layout_content = Course_Layout_Content(size_hint=[1, .95])
-            check1 = user_check(qq_number)
-            popup_text = ''
-            if check1 in [False,-1] :
-                if check1 is False:
-                    popup_text = '账号未绑定课表，请先绑定吧'
-                else:
-                    popup_text = '网络出现错误，请稍后试试?'
-                layout_content.add_items()
-            else:
-                if self.count_in2 == 0:
-                    session = login(get_cookie(qq_number))
-                    if session[1] < 1300:
-                        popup_text = '网络出现错误，请稍后再点一下试试?'
-                    elif session[1] > 30000:
-                        self.course_ls = get_kb(session[0])
-                        self.week = get_now_week(session[0])
-                        all_week = get_all_week(session[0])
-                        print(self.week)
-                        self.count_in2 = 1
-                        layout_content.add_items(class_ls=self.course_ls,week=self.week)
-                else:
-                    layout_content.add_items(class_ls=self.course_ls, week=self.week)
-            if self.count_in2 == 0:
-                popup=MyPopup(popup_text)
-                popup.open()
-            course_screen.add_widget(layout_content)
+            course_screen.first_add()
+
         th2.bind(on_release=on_move_in2)
         def on_move_in1(instance):
             course_screen.clear_widgets()
