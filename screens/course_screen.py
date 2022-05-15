@@ -22,7 +22,7 @@ class Course_Screen(GridLayout):
         self.all_week = '20'
         self.count_in2 = 0
         self.qq_number = qq_number
-        self.layout_content = Course_Layout_Content(size_hint=[1, .95])
+        self.layout_content = Course_Layout_Content(size_hint=[1, .9])
         self.drop_list = Course_Drop_List(self.week,height=self.height / 2, size_hint=(.3, 1))
 
         self.dropdown = DropDown()
@@ -53,14 +53,14 @@ class Course_Screen(GridLayout):
                 self.refresh(self.week)
         self.pre_week_button.bind(on_release=on_press_pre_week)
         self.next_week_button.bind(on_release=on_press_next_week)
-        self.course_layout_title = Course_Layout_Title(self.drop_list,self.pre_week_button,self.next_week_button, size_hint=[1, .05])
+        self.course_layout_title = Course_Layout_Title(self.drop_list,self.pre_week_button,self.next_week_button, size_hint=[1, .1])
 
 
 
 
     def first_add(self):
         qq_number = self.qq_number
-        self.layout_content = Course_Layout_Content(size_hint=[1, .95])
+        self.layout_content = Course_Layout_Content(size_hint=[1, .9])
         check1 = user_check(qq_number)
         popup_text = ''
         if check1 in [False, -1]:

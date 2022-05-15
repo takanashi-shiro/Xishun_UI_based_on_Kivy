@@ -46,37 +46,40 @@ class Model_Screen(Screen):
             do_default_tab=False,
             tab_height=40,
         )
-        username = read_tmp()
         th1 = TabbedPanelHeader(text='home')
-        tp.add_widget(th1)
-        th2 = TabbedPanelHeader(text='课表', font_name=ft)
         th1.content = Main_Screen()
-        qq_number = get_qq_number(username)
-        course_screen = Course_Screen(qq_number)
+        tp.add_widget(th1)
+        def on_enter(instance):
+            username = read_tmp()
+            qq_number = get_qq_number(username)
+            course_screen = Course_Screen(qq_number)
+            th2 = TabbedPanelHeader(text='课表', font_name=ft)
 
+            def on_move_in2(instance):
+                elc_screen.clear_widgets()
+                course_screen.first_add()
 
+            th2.bind(on_release=on_move_in2)
 
-        def on_move_in2(instance):
-            elc_screen.clear_widgets()
-            course_screen.first_add()
+            def on_move_in1(instance):
+                course_screen.clear_widgets()
 
-        th2.bind(on_release=on_move_in2)
-        def on_move_in1(instance):
-            course_screen.clear_widgets()
-        th1.bind(on_release=on_move_in1)
-        th2.content = course_screen
-        tp.add_widget(th2)
-        th3 = TabbedPanelHeader(text='电费查询', font_name=ft)
-        elc_screen = Elc_Screen()
-        def on_move_in3(instance):
-            course_screen.clear_widgets()
-            elc_label = Elc_Info_Label()
-            if find_bd(qq_number):
-                elc_label.update_text(qq_number)
-            elc_screen.add_widget(elc_label)
-            elc_screen.add_widget(Elc_Layout())
+            th1.bind(on_release=on_move_in1)
+            th2.content = course_screen
+            tp.add_widget(th2)
+            th3 = TabbedPanelHeader(text='电费查询', font_name=ft)
+            elc_screen = Elc_Screen()
 
-        th3.bind(on_release=on_move_in3)
-        th3.content = elc_screen
-        tp.add_widget(th3)
-        self.add_widget(tp)
+            def on_move_in3(instance):
+                course_screen.clear_widgets()
+                elc_label = Elc_Info_Label()
+                if find_bd(qq_number):
+                    elc_label.update_text(qq_number)
+                elc_screen.add_widget(elc_label)
+                elc_screen.add_widget(Elc_Layout())
+
+            th3.bind(on_release=on_move_in3)
+            th3.content = elc_screen
+            tp.add_widget(th3)
+            self.add_widget(tp)
+        self.bind(on_enter=on_enter)

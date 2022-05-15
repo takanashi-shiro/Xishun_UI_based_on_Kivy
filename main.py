@@ -4,10 +4,6 @@
 # @Software : Pycharm
 # @Time     : 2022/05/06 - 2022/05/14
 
-
-
-
-
 import kivy
 from kivy import Config
 from kivy.core.window import Window
