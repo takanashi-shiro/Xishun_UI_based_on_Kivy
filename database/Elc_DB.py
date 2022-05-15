@@ -91,7 +91,7 @@ def ser_by_qq(qq_number):
             hours = str(tmp.hour)
             minutes = str(tmp.minute)
             seconds = str(tmp.second)
-        elc = get_elc(str(result[0]), str(result[1]))
+        elc = get_elc(str(result[0]), str(result[1]))[0]
         print(elc)
         print(elc_pre)
         update(qq_number, result[0], result[1], elc, today_time)

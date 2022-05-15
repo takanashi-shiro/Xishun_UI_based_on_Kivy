@@ -11,6 +11,7 @@ from funcs.kb.login import login
 from widgets.Popup_item import MyPopup
 from widgets.course_item import Course_Layout_Title, Course_Layout_Content
 from widgets.elc_item import Elc_Info_Label, Elc_Layout
+from widgets.user import User
 from .elc_screen import Elc_Screen
 
 kivy.require('2.1.0')
@@ -47,36 +48,42 @@ class Model_Screen(Screen):
             tab_height=40,
         )
         username = read_tmp()
+        qq_number = get_qq_number(username)
+        user = User(username=username, qq_number=qq_number)
+        course_screen = Course_Screen(user)
         th1 = TabbedPanelHeader(text='home')
+        th1.content = Main_Screen(user)
         tp.add_widget(th1)
         th2 = TabbedPanelHeader(text='课表', font_name=ft)
-        th1.content = Main_Screen()
-        qq_number = get_qq_number(username)
-        course_screen = Course_Screen(qq_number)
 
+        def on_enter(instance):
 
+            def on_move_in2(instance):
+                elc_screen.clear_widgets()
+                course_screen.first_add(user)
 
-        def on_move_in2(instance):
-            elc_screen.clear_widgets()
-            course_screen.first_add()
+            th2.bind(on_release=on_move_in2)
 
-        th2.bind(on_release=on_move_in2)
-        def on_move_in1(instance):
-            course_screen.clear_widgets()
-        th1.bind(on_release=on_move_in1)
-        th2.content = course_screen
-        tp.add_widget(th2)
-        th3 = TabbedPanelHeader(text='电费查询', font_name=ft)
-        elc_screen = Elc_Screen()
-        def on_move_in3(instance):
-            course_screen.clear_widgets()
-            elc_label = Elc_Info_Label()
-            if find_bd(qq_number):
-                elc_label.update_text(qq_number)
-            elc_screen.add_widget(elc_label)
-            elc_screen.add_widget(Elc_Layout())
+            def on_move_in1(instance):
+                course_screen.clear_widgets()
+                elc_screen.clear_widgets()
 
-        th3.bind(on_release=on_move_in3)
-        th3.content = elc_screen
-        tp.add_widget(th3)
-        self.add_widget(tp)
+            th1.bind(on_release=on_move_in1)
+            th2.content = course_screen
+            tp.add_widget(th2)
+            th3 = TabbedPanelHeader(text='电费查询', font_name=ft)
+            elc_screen = Elc_Screen()
+
+            def on_move_in3(instance):
+                course_screen.clear_widgets()
+                elc_label = Elc_Info_Label()
+                if find_bd(qq_number):
+                    elc_label.update_text(qq_number)
+                elc_screen.add_widget(elc_label)
+                elc_screen.add_widget(Elc_Layout())
+
+            th3.bind(on_release=on_move_in3)
+            th3.content = elc_screen
+            tp.add_widget(th3)
+            self.add_widget(tp)
+        self.bind(on_enter=on_enter)

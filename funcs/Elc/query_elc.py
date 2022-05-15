@@ -16,4 +16,4 @@ def get_elc(building, room):
     search = str(choose_building()[1][building])
     room_id = str(choose_room(search)[1][choose_room(search)[0].index(room)])
     elc = eval(query_elc(room_id)[1])
-    return elc
+    return elc,room_id

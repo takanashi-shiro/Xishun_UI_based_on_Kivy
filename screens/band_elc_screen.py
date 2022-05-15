@@ -12,7 +12,7 @@ from widgets.textinput_item import digital_TextInput
 
 class Band_Elc_Screen(RelativeLayout):
 
-    def __init__(self, username, **kwargs):
+    def __init__(self, user, **kwargs):
         super(Band_Elc_Screen, self).__init__(**kwargs)
         self.add_widget(MyLabel(
             text='绑定电费信息',
@@ -60,12 +60,14 @@ class Band_Elc_Screen(RelativeLayout):
         def submit(instance):
             building = building_textinput.text
             room = room_textinput.text
+            qq_number = user.get_qq_number()
             popup_text = '绑定成功'
             try:
                 elc = get_elc(building,room)
+                user.set_room_id(elc[1])
                 print(elc)
                 popup = MyPopup(popup_text)
-                t = MyThread(insert,(get_qq_number(username),building,room,elc))
+                t = MyThread(insert,(qq_number,building,room,elc[0]))
                 t.daemon = True
                 t.start()
             except:

@@ -14,7 +14,7 @@ from widgets.textinput_item import Passwd_TextInput, Username_TextInput
 
 class Band_Kb_Screen(RelativeLayout):
 
-    def __init__(self, username, **kwargs):
+    def __init__(self, user, **kwargs):
         super(Band_Kb_Screen, self).__init__(**kwargs)  # 这里要加super，才能把现有的新初始化方法覆盖掉继承来的旧初始化方法
 
         self.add_widget(MyLabel(
@@ -65,15 +65,17 @@ class Band_Kb_Screen(RelativeLayout):
         def submit(instance):
             username_kb = username_textinput.text
             pwd_kb = passwd_textinput.text
-            encode_username = base64.b64encode(username_kb.encode("utf-8")).decode('utf-8')
-            encode_passwd = base64.b64encode(pwd_kb.encode("utf-8")).decode('utf-8')
-            encode = encode_username + "%%%" + encode_passwd
-            length = login(encode)[1]
+            print(pwd_kb)
+            user.set_encode(username_kb,pwd_kb)
+            encode = user.get_encode()
+            print(encode)
+            qq_number = user.get_qq_number()
+            length = login(user.get_encode())[1]
             popup_text = '绑定成功'
             if 1300 < length < 30000:
                 popup_text = '账号或密码错误，重试8'
             else:
-                t = MyThread(insert_jwxt,(get_qq_number(username),encode))
+                t = MyThread(insert_jwxt,(qq_number,encode))
                 t.daemon = True
                 t.start()
             popup = MyPopup(popup_text)

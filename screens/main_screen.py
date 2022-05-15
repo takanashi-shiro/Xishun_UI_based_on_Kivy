@@ -31,7 +31,7 @@ class Main_Screen(GridLayout):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
 
-    def __init__(self, **kwargs):
+    def __init__(self,user, **kwargs):
         super(Main_Screen, self).__init__(**kwargs)
         self.rows = 2
         Home_Title = (Label(
@@ -53,13 +53,12 @@ class Main_Screen(GridLayout):
             size_hint=[.2,.2],
             font_name=ft
         )
-
+        username = user.get_username()
         def press_band_kb(instance):
             print('The button <%s> is being pressed' % instance.text)
-            username = read_tmp()
             print(username)
             popup_band_kb = Popup()
-            popup_band_kb.content = Band_Kb_Screen(username=username)
+            popup_band_kb.content = Band_Kb_Screen(user)
             popup_band_kb.title = 'Band_KB'
             popup_band_kb.font_name = ft
             popup_band_kb.size_hint = (.8, .8)
@@ -75,10 +74,9 @@ class Main_Screen(GridLayout):
         )
         def press_band_elc(instance):
             print('The button <%s> is being pressed' % instance.text)
-            username = read_tmp()
             print(username)
             popup_band_elc = Popup()
-            popup_band_elc.content = Band_Elc_Screen(username=username)
+            popup_band_elc.content = Band_Elc_Screen(user)
             popup_band_elc.title = 'Band_Elc'
             popup_band_elc.font_name = ft
             popup_band_elc.size_hint = (.8, .8)
