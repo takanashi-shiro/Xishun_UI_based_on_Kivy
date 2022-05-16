@@ -1,14 +1,14 @@
 import kivy
 from kivy.graphics import Color, Rectangle
-from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 
 from screens.band_elc_screen import Band_Elc_Screen
 from screens.band_kb_screen import Band_Kb_Screen
 from screens.change_pwd_screen import Change_Pwd_Screen
-from funcs.do_in_tmp import read_tmp
+from funcs.do_in_tmp import read_tmp, clean_tmp
+from widgets.button_item import MyButton
+from widgets.label_item import MyLabel
 
 kivy.resources.resource_add_path('font/')
 ft = kivy.resources.resource_find('DroidSansFallback.ttf')
@@ -31,15 +31,14 @@ class Main_Screen(GridLayout):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
 
-    def __init__(self,user, **kwargs):
+    def __init__(self,user,model, **kwargs):
         super(Main_Screen, self).__init__(**kwargs)
         self.rows = 2
-        Home_Title = (Label(
-            text="喜顺's Home",
+        Home_Title = (MyLabel(
+            text="个人中心",
             font_size=50, size_hint=(.5, .5),
             color=[0, .5, 1, 1],
             pos_hint={'right':0.5, 'top': 0.5},
-            font_name=ft
         ))
         self.add_widget(Home_Title)
 
@@ -48,10 +47,9 @@ class Main_Screen(GridLayout):
         with buttons_layout.canvas.before:
             Color(1, 1, 1, 1)
             buttons_layout.rect = Rectangle(size=buttons_layout.size, pos=buttons_layout.pos)
-        btn1 = Button(
+        btn1 = MyButton(
             text ='绑定课表信息',
-            size_hint=[.2,.2],
-            font_name=ft
+            size_hint=[.2,.2]
         )
         username = user.get_username()
         def press_band_kb(instance):
@@ -67,10 +65,9 @@ class Main_Screen(GridLayout):
 
         btn1.bind(on_press=press_band_kb)
         buttons_layout.add_widget(btn1)
-        btn2 = Button(
+        btn2 = MyButton(
             text='绑定电费信息',
-            size_hint=[.2,.2],
-            font_name=ft
+            size_hint=[.2,.2]
         )
         def press_band_elc(instance):
             print('The button <%s> is being pressed' % instance.text)
@@ -83,14 +80,13 @@ class Main_Screen(GridLayout):
             popup_band_elc.open()
         btn2.bind(on_press=press_band_elc)
         buttons_layout.add_widget(btn2)
-        btn3 = Button(
+        btn3 = MyButton(
             text='修改密码',
-            size_hint=[.2,.2],
-            font_name=ft
+            size_hint=[.2,.2]
         )
         def press_change_pwd(instance):
             print('The button <%s> is being pressed' % instance.text)
-            username = read_tmp()
+            username = str(read_tmp().split()[0])
             print(username)
             popup_change_pwd = Popup()
             popup_change_pwd.content = Change_Pwd_Screen(username=username)
@@ -100,4 +96,10 @@ class Main_Screen(GridLayout):
             popup_change_pwd.open()
         btn3.bind(on_press=press_change_pwd)
         buttons_layout.add_widget(btn3)
+        btn4 = MyButton(text='退出登录',size_hint=(.2,.2))
+        def press_exit(instance):
+            clean_tmp()
+            model.manager.current = 'login'
+        btn4.bind(on_press=press_exit)
+        buttons_layout.add_widget(btn4)
         self.add_widget(buttons_layout)

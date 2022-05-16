@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import Screen
 from database.DB_user import login_check, get_username
 from widgets.Popup_item import MyPopup
 from widgets.button_item import MyButton
-from funcs.do_in_tmp import write_in_tmp
+from funcs.do_in_tmp import write_in_tmp, read_tmp
 from widgets.label_item import MyLabel
 from widgets.textinput_item import Username_TextInput, Passwd_TextInput
 
@@ -71,7 +71,6 @@ class Login_Screen(Screen):
             # font_size=self.height*0.25,
             tab_width=0
         )
-
         def submit(instance):
             username = username_textinput.text.split()
             passwd = passwd_textinput.text.split()
@@ -88,9 +87,9 @@ class Login_Screen(Screen):
             status = login_check(username,passwd)
             if status == 1 or status == 2:
                 if status == 1:
-                    write_in_tmp(username)
+                    write_in_tmp(username,passwd)
                 else:
-                    write_in_tmp(get_username(username))
+                    write_in_tmp(get_username(username),passwd)
                 self.manager.current = 'model'
             else:
                 popup_text = '用户名或密码错误'
@@ -143,3 +142,16 @@ class Login_Screen(Screen):
 
         self.register.bind(on_ref_press=press_register)
         self.add_widget(self.register)
+
+    def cheak_logined(self):
+        try:
+            tmp_ls = read_tmp().split()
+            username = tmp_ls[0]
+            passwd = tmp_ls[1]
+            if tmp_ls:
+                status = login_check(username, passwd)
+                print(status)
+                if status in [1,2]:
+                    self.manager.current = 'model'
+        except Exception as e:
+            print(e)

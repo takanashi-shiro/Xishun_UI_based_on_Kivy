@@ -20,10 +20,12 @@ from screens.forget_passwd_screen import Forget_Pwd_Screen
 class MyApp(App):
     def build(self):
         screen_manager = ScreenManager()
-        screen_manager.add_widget(Login_Screen(name='login'))
+        login_screen = Login_Screen(name='login')
+        screen_manager.add_widget(login_screen)
         screen_manager.add_widget(Model_Screen(name='model'))
         screen_manager.add_widget(Register_Screen(name='register'))
         screen_manager.add_widget(Forget_Pwd_Screen(name='forget_pwd'))
+        login_screen.cheak_logined()
         return screen_manager
 
 
