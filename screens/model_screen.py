@@ -41,24 +41,24 @@ class Model_Screen(Screen):
         home_screen = Home_Screen()
         home_screen.add_items()
         th.content = home_screen
+        th1 = TabbedPanelHeader(text='个人中心', font_name=ft)
+        th2 = TabbedPanelHeader(text='课表', font_name=ft)
+        th3 = TabbedPanelHeader(text='电费查询', font_name=ft)
         tp.add_widget(th)
         self.entered = 0
         def on_enter(instance):
-            if self.entered == 1:
-                return
-            self.entered = 1
             self.username = str(read_tmp().split()[0])
             qq_number = get_qq_number(self.username)
             user = User(username=self.username, qq_number=qq_number)
             course_screen = Course_Screen(user)
-            th1 = TabbedPanelHeader(text='个人中心',font_name=ft)
             th1.content = Main_Screen(user, self)
             tp.add_widget(th1)
-            th2 = TabbedPanelHeader(text='课表', font_name=ft)
             def on_move_in0(instance):
-                course_screen.clear_widgets()
-                elc_screen.clear_widgets()
-                home_screen.add_items()
+                if self.entered == 1:
+                    home_screen.clear_widgets()
+                    course_screen.clear_widgets()
+                    elc_screen.clear_widgets()
+                    home_screen.add_items()
 
             th.bind(on_release=on_move_in0)
             def on_move_in1(instance):
@@ -77,7 +77,6 @@ class Model_Screen(Screen):
 
             th2.content = course_screen
             tp.add_widget(th2)
-            th3 = TabbedPanelHeader(text='电费查询', font_name=ft)
             elc_screen = Elc_Screen()
 
             def on_move_in3(instance):
@@ -92,10 +91,17 @@ class Model_Screen(Screen):
             th3.bind(on_release=on_move_in3)
             th3.content = elc_screen
             tp.add_widget(th3)
-
             self.add_widget(tp)
+            self.entered = 1
 
         self.bind(on_enter=on_enter)
-
+        def on_leave(instance):
+            home_screen.clear()
+            th.clear_widgets()
+            th1.clear_widgets()
+            th2.clear_widgets()
+            tp.clear_widgets()
+            self.clear_widgets()
+        self.bind(on_leave=on_leave)
     def update_username(self,username):
         self.username = username

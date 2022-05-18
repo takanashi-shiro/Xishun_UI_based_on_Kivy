@@ -8,6 +8,7 @@ class Home_Screen(GridLayout):
     def __init__(self, **kwargs):
         super(Home_Screen, self).__init__(**kwargs)
         self.rows = 2
+
     def add_items(self):
         Home_Title = (MyLabel(
             text="喜顺's Home",
@@ -24,3 +25,5 @@ class Home_Screen(GridLayout):
         ))
         self.add_widget(Home_Content)
 
+    def clear(self):
+        self.clear_widgets()
