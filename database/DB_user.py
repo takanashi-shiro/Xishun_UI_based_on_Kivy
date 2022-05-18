@@ -21,6 +21,7 @@ def qq_check(qq_number):
         else:
             return True
     except Exception as e:
+        print(e)
         return -1
 
 
@@ -53,6 +54,7 @@ def get_username(qq_number):
         else:
             return username[0]
     except Exception as e:
+        print(e)
         return -1
 
 
@@ -69,6 +71,7 @@ def get_qq_number(username):
         else:
             return qq_number[0]
     except Exception as e:
+        print(e)
         return -1
 
 
@@ -85,6 +88,7 @@ def get_passwd(UI_username):
         else:
             return passwd[0]
     except Exception as e:
+        print(e)
         return -1
 
 
@@ -120,6 +124,7 @@ def login_check(username_or_qqNumber, pwd):
         else:
             return 0
     except Exception as e:
+        print(e)
         return -1, username_or_qqNumber
 
 

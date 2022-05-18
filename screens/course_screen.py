@@ -32,7 +32,7 @@ class Course_Screen(GridLayout):
                 self.dropdown.select(btn1.text)
                 week = btn1.text
                 self.week = week[1:-1]
-                self.refresh(self.week)
+                self.refresh(self.week,user)
 
             btn.bind(on_release=on_press_child)
             self.dropdown.add_widget(btn)
