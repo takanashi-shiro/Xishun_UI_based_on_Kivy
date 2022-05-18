@@ -5,10 +5,10 @@ from kivy.uix.screenmanager import Screen
 from database.DB_user import update_pwd, username_check, get_username
 from widgets.Popup_item import MyPopup_Remind, MyPopup
 from widgets.button_item import Return_Button, MyButton
-from widgets.captcha_create import Captcha_Create
+from funcs.captcha_create import Captcha_Create
 from widgets.label_item import MyLabel
 from widgets.mythread import MyThread
-from widgets.send_mail import Send_Msg
+from funcs.send_mail import Send_Msg
 from widgets.textinput_item import Username_TextInput, Passwd_TextInput, QQ_TextInput
 
 

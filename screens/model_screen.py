@@ -42,7 +42,11 @@ class Model_Screen(Screen):
         home_screen.add_items()
         th.content = home_screen
         tp.add_widget(th)
+        self.entered = 0
         def on_enter(instance):
+            if self.entered == 1:
+                return
+            self.entered = 1
             self.username = str(read_tmp().split()[0])
             qq_number = get_qq_number(self.username)
             user = User(username=self.username, qq_number=qq_number)
@@ -88,6 +92,7 @@ class Model_Screen(Screen):
             th3.bind(on_release=on_move_in3)
             th3.content = elc_screen
             tp.add_widget(th3)
+
             self.add_widget(tp)
 
         self.bind(on_enter=on_enter)

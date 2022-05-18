@@ -1,4 +1,3 @@
-from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 from kivy.uix.screenmanager import Screen
 
@@ -22,9 +21,9 @@ class Login_Screen(Screen):
         with self.canvas.before:
             Color(1, 1, 1, .95)
             self.rect = Rectangle(size=self.size, pos=self.pos)
-        self.size_hint = (None,None)
+        # self.size_hint = (None,None)
         # Window.size = [900,1600]
-        self.size = Window.size
+        # self.size = Window.size
         print(self.size)
         title = MyLabel(
             text='喜顺',
